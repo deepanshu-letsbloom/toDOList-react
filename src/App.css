@@ -36,3 +36,147 @@
     transform: rotate(360deg);
   }
 }
+
+
+.flex-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+
+
+.body{
+background-color: #F3E8E8;
+font-family: "Poppins", sans-serif;
+}
+
+
+.mainHeading{
+font-size: 4.5vw;
+margin-top: 110px;
+font-weight: bold;
+
+
+}
+
+.smallHeading{
+font-size: 2vw;
+margin-top: 0px;
+margin-bottom: 5px;
+width: 19vw;
+}
+
+.addItem{
+width: 30vw;
+height: 4vw;
+border-radius: 32px;
+font-size: 1.5vw;
+padding-left: 30px;
+padding-right: 15px;
+border: none;
+box-shadow: 0px 0px 8px 0 rgba(189, 42, 42, 0.25);
+margin-top: 5px;
+}
+
+.addListButton{
+margin-top: 15px;
+width: 15vw;
+height: 3vw;
+font-size: 1.5vw;
+background-color: white;
+padding :8px, 16px, 8px, 16px;
+border: none;
+border-radius: 8px;
+cursor:pointer;
+margin-right: 5px;
+
+}
+
+.btnEditDiv{
+margin-top: 15px;
+width: 15vw;
+height: 3vw;
+font-size: 1.5vw;
+background-color: white;
+padding :8px, 16px, 8px, 16px;
+border: none;
+border-radius: 8px;
+cursor:pointer;
+}
+
+.btnAPI{
+margin-top: 15px;
+width: 15vw;
+height: 3vw;
+font-size: 1.5vw;
+background-color: white;
+padding :8px, 16px, 8px, 16px;
+border: none;
+border-radius: 8px;
+cursor:pointer;
+}
+
+.taskList{
+list-style-type:none;
+margin-top: 25px;
+padding-left: 0px;
+
+}
+
+.taskList li{
+width: 28vw;
+/* height: 2.5vw; */
+font-size: 1.2vw;
+background-color: #F3BAC2;
+margin-bottom: 5px;
+ /* padding-top: 10px; */
+padding-left: 15px;
+border-radius: 10px;
+display: flex;
+/* align-items: center; */
+justify-content: center;
+
+}
+
+.taskList li p{
+  width: 20vw;
+  padding-right: 10px;
+}
+
+
+.btn{
+  background-color:  #F3BAC2;
+  margin-top: 10px;
+  bottom: 10px;
+  right: 10px;
+  height: 2vw;
+  cursor: pointer;
+  color: red;
+  font-size: 1.2vw;
+
+}
+
+
+
+
+
+
+@media only screen and (max-width: 900px) {
+.flex-container{
+  position: relative;
+}
+
+.mainHeading{
+  font-size: 6.5vw;
+}
+
+.smallHeading{
+  font-size: 2.5vw;
+  width: 23vw;
+}
+.addItem{
+  width: 35vw;
+}
+}
