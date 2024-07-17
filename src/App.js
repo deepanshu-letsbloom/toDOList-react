@@ -6,25 +6,66 @@ const App = () => {
 
     const [task, setTask] = useState("");
     const [taskArray, setTaskArray] = useState([]);
+    const [totalTask, setTotalTasks] = useState(0);
+    const [completedTask, setCompletedTasks] = useState(0);
+    const [pendingTask, setPendingTasks] = useState(0);
 
     const handleTaskChange = (event) => {
         setTask(event.target.value);
     }
-    const submitTaskItem = () => {
-        var tempTask = task.trim();
-        if (tempTask === "") {
-            alert("Please insert a valid task!!!")
-            return;
+
+    const handleCheckboxChange = (index) =>{
+        if (taskArray[index].completed === true){
+            setCompletedTasks(completedTask-1);
+            setPendingTasks(pendingTask+1);
+            taskArray[index].completed = false;
         }
-        setTaskArray([task, ...taskArray]);
-        setTask("")
+        else{
+            setCompletedTasks(completedTask+1);
+            setPendingTasks(pendingTask-1);
+            taskArray[index].completed = true;
+        }
     }
 
-    const resetList = () => {
-        setTaskArray([]);
-    };
+    const submitTaskItem = async () => {
+        try {
+            var tempTask = task.trim();
+            if (tempTask === "") {
+                alert("Please insert a valid task!!!")
+                return;
+            }
+            // console.log("here ", tempTask)
+            const response = await fetch("https://jsonplaceholder.typicode.com/todos", {
+                method: 'POST',
+                body: JSON.stringify({
+                    completed: false,
+                    title: tempTask,
+                    id: 1000
+                }),
+                headers: {
+                    'Content-type': 'application/json; charset=UTF-8',
+                },
+            });
+            const data = await response.json();
+            setTotalTasks(totalTask + 1);
+            if (data.completed === true) setCompletedTasks(completedTask + 1);
+            else setPendingTasks(pendingTask + 1);
+            setTaskArray([data, ...taskArray]);
+            setTask("")
+
+        } catch (error) {
+            console.log('Error receiving data', error);
+        }
+    }
+
+    // const resetList = () => {
+    //     setTaskArray([]);
+    // };
 
     const deleteTask = (deleteIndex) => {
+        setTotalTasks(totalTask - 1);
+        if (taskArray[deleteIndex].completed) setPendingTasks(pendingTask - 1);
+        else setCompletedTasks(completedTask - 1);
         const temp = taskArray.filter((item, index) => deleteIndex !== index);
         setTaskArray(temp);
     }
@@ -36,10 +77,16 @@ const App = () => {
             });
             const data = await response.json();
             var temp = [];
-            data.reverse().map((value) => {
-                temp.push(value.title);
+            let tot = 0, pending = 0, completed = 0;
+            data.map((value) => {
+                temp.push({ "id": value.id, "title": value.title, "completed": value.completed });
+                tot++;
+                if (value.completed === true) completed++;
+                else pending++;
             })
-            temp = temp.concat(taskArray);
+            setCompletedTasks(completed);
+            setTotalTasks(tot);
+            setPendingTasks(pending);
             setTaskArray(temp);
         } catch (error) {
             console.log('Error receiving data', error);
@@ -48,7 +95,7 @@ const App = () => {
 
     useEffect(() => {
         getFromAPI();
-    },[]);
+    }, []);
 
 
     return (
@@ -73,15 +120,22 @@ const App = () => {
                     Add list item
                 </button>
 
-                <button className="btnEditDiv" onClick={resetList}>Reset List</button>
+                {/* <button className="btnEditDiv" onClick={resetList}>Reset List</button> */}
             </div>
 
-            <button className="btnAPI" onClick={getFromAPI}>Get From API</button>
+            <div className='taskBtn'>
+                <div>Total tasks : {totalTask}</div>
+                <div>Pending tasks : {pendingTask}</div>
+                <div>completed tasks : {completedTask} </div>
+            </div>
+
+            {/* <button className="btnAPI" onClick={getFromAPI}>Get From API</button> */}
 
             <ul className="taskList" id="myUL">
                 {taskArray.map((task, index) => {
                     return <li>
-                        <p>{task}</p>
+                        <input type='checkbox' checked={task.completed} onChange={() => handleCheckboxChange(index)}/>
+                        <p>{task.title}</p>
                         <button className="btn" onClick={() => deleteTask(index)}>Delete</button>
                     </li>
                 })}
@@ -91,4 +145,4 @@ const App = () => {
     );
 };
 
-export default App;
+export default App; 

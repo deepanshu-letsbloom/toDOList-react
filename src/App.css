@@ -1,160 +1,177 @@
 .App {
-  text-align: center;
+    text-align: center;
 }
 
 .App-logo {
-  height: 40vmin;
-  pointer-events: none;
+    height: 40vmin;
+    pointer-events: none;
 }
 
 @media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+    .App-logo {
+        animation: App-logo-spin infinite 20s linear;
+    }
 }
 
 .App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+    background-color: #282c34;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-size: calc(10px + 2vmin);
+    color: white;
 }
 
 .App-link {
-  color: #61dafb;
+    color: #61dafb;
 }
 
 @keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
 }
 
 
 .flex-container {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
 }
 
 
 
-.body{
-background-color: #F3E8E8;
-font-family: "Poppins", sans-serif;
+.body {
+    background-color: #F3E8E8;
+    font-family: "Poppins", sans-serif;
 }
 
 
-.mainHeading{
-font-size: 4.5vw;
-margin-top: 110px;
-font-weight: bold;
+.mainHeading {
+    font-size: 50px;
+    margin-top: 50px;
+    font-weight: bold;
+}
 
+.smallHeading {
+    font-size: 30px;
+    margin-top: 0px;
+    margin-bottom: 5px;
+    /* width: 19vw; */
+}
+
+.addItem {
+    width: 450px;
+    height: 55px;
+    border-radius: 32px;
+    font-size: 20px;
+    padding-left: 30px;
+    padding-right: 15px;
+    border: none;
+    box-shadow: 0px 0px 8px 0 rgba(189, 42, 42, 0.25);
+    margin-top: 5px;
+}
+
+.addListButton {
+    margin-top: 15px;
+    width: 180px;
+    height: 45px;
+    font-size: 22px;
+    background-color: white;
+    padding: 8px, 16px, 8px, 16px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    margin-right: 5px;
 
 }
 
-.smallHeading{
-font-size: 2vw;
-margin-top: 0px;
-margin-bottom: 5px;
-width: 19vw;
+/* 
+.btnEditDiv {
+    margin-top: 15px;
+    width: 15vw;
+    height: 3vw;
+    font-size: 1.5vw;
+    background-color: white;
+    padding: 8px, 16px, 8px, 16px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
 }
 
-.addItem{
-width: 30vw;
-height: 4vw;
-border-radius: 32px;
-font-size: 1.5vw;
-padding-left: 30px;
-padding-right: 15px;
-border: none;
-box-shadow: 0px 0px 8px 0 rgba(189, 42, 42, 0.25);
-margin-top: 5px;
+.btnAPI {
+    margin-top: 15px;
+    width: 15vw;
+    height: 3vw;
+    font-size: 1.5vw;
+    background-color: white;
+    padding: 8px, 16px, 8px, 16px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+} */
+
+.taskBtn {
+    display: flex;
+    flex-direction: row;
 }
 
-.addListButton{
-margin-top: 15px;
-width: 15vw;
-height: 3vw;
-font-size: 1.5vw;
-background-color: white;
-padding :8px, 16px, 8px, 16px;
-border: none;
-border-radius: 8px;
-cursor:pointer;
-margin-right: 5px;
-
+.taskBtn div {
+    font-size: 15px;
+    width: 100px;
+    background-color: white;
+    margin: 30px 10px 0px 10px;
+    padding: 10px 10px 10px 10px;
+    border-radius: 15px;
+    align-content: center;
 }
 
-.btnEditDiv{
-margin-top: 15px;
-width: 15vw;
-height: 3vw;
-font-size: 1.5vw;
-background-color: white;
-padding :8px, 16px, 8px, 16px;
-border: none;
-border-radius: 8px;
-cursor:pointer;
-}
-
-.btnAPI{
-margin-top: 15px;
-width: 15vw;
-height: 3vw;
-font-size: 1.5vw;
-background-color: white;
-padding :8px, 16px, 8px, 16px;
-border: none;
-border-radius: 8px;
-cursor:pointer;
-}
-
-.taskList{
-list-style-type:none;
-margin-top: 25px;
-padding-left: 0px;
+.taskList {
+    list-style-type: none;
+    margin-top: 25px;
+    padding-left: 0px;
 
 }
 
-.taskList li{
-width: 28vw;
-/* height: 2.5vw; */
-font-size: 1.2vw;
-background-color: #F3BAC2;
-margin-bottom: 5px;
- /* padding-top: 10px; */
-padding-left: 15px;
-border-radius: 10px;
-display: flex;
-/* align-items: center; */
-justify-content: center;
+
+.taskList li {
+    width: 420px;
+    /* height: 2.5vw; */
+    font-size: 18px;
+    background-color: #F3BAC2;
+    margin-bottom: 5px;
+    /* padding-top: 10px; */
+    padding-left: 15px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    /* justify-content: center; */
 
 }
 
-.taskList li p{
-  width: 20vw;
-  padding-right: 10px;
+.taskList li p {
+    width: 300px;
+    padding-right: 10px;
+    margin-left: 10px;
+    font-size: 15px;
 }
 
 
-.btn{
-  background-color:  #F3BAC2;
-  margin-top: 10px;
-  bottom: 10px;
-  right: 10px;
-  height: 2vw;
-  cursor: pointer;
-  color: red;
-  font-size: 1.2vw;
+.btn {
+    background-color: #F3BAC2;
+    bottom: 10px;
+    right: 10px;
+    height: 28px;
+    cursor: pointer;
+    color: red;
+    font-size: 15px;
 
 }
 
@@ -164,19 +181,20 @@ justify-content: center;
 
 
 @media only screen and (max-width: 900px) {
-.flex-container{
-  position: relative;
-}
+    .flex-container {
+        position: relative;
+    }
 
-.mainHeading{
-  font-size: 6.5vw;
-}
+    .mainHeading {
+        font-size: 6.5vw;
+    }
 
-.smallHeading{
-  font-size: 2.5vw;
-  width: 23vw;
-}
-.addItem{
-  width: 35vw;
-}
+    .smallHeading {
+        font-size: 2.5vw;
+        width: 23vw;
+    }
+
+    .addItem {
+        width: 35vw;
+    }
 }
