@@ -1,0 +1,160 @@
+
+.flex-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+
+
+.body {
+    background-color: #F3E8E8;
+    font-family: "Poppins", sans-serif;
+}
+
+
+.mainHeading {
+    font-size: 50px;
+    margin-top: 50px;
+    font-weight: bold;
+}
+
+.smallHeading {
+    font-size: 30px;
+    margin-top: 0px;
+    margin-bottom: 5px;
+    /* width: 19vw; */
+}
+
+.addItem {
+    width: 450px;
+    height: 55px;
+    border-radius: 32px;
+    font-size: 20px;
+    padding-left: 30px;
+    padding-right: 15px;
+    border: none;
+    box-shadow: 0px 0px 8px 0 rgba(189, 42, 42, 0.25);
+    margin-top: 5px;
+}
+
+.addListButton {
+    margin-top: 15px;
+    width: 180px;
+    height: 45px;
+    font-size: 22px;
+    background-color: white;
+    padding: 8px, 16px, 8px, 16px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    margin-right: 5px;
+
+}
+
+/* 
+.btnEditDiv {
+    margin-top: 15px;
+    width: 15vw;
+    height: 3vw;
+    font-size: 1.5vw;
+    background-color: white;
+    padding: 8px, 16px, 8px, 16px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.btnAPI {
+    margin-top: 15px;
+    width: 15vw;
+    height: 3vw;
+    font-size: 1.5vw;
+    background-color: white;
+    padding: 8px, 16px, 8px, 16px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+} */
+
+.taskBtn {
+    display: flex;
+    flex-direction: row;
+}
+
+.taskBtn div {
+    font-size: 15px;
+    width: 100px;
+    background-color: white;
+    margin: 30px 10px 0px 10px;
+    padding: 10px 10px 10px 10px;
+    border-radius: 15px;
+    align-content: center;
+}
+
+.taskList {
+    list-style-type: none;
+    margin-top: 25px;
+    padding-left: 0px;
+
+}
+
+
+.taskList li {
+    width: 420px;
+    /* height: 2.5vw; */
+    font-size: 18px;
+    background-color: #F3BAC2;
+    margin-bottom: 5px;
+    /* padding-top: 10px; */
+    padding-left: 15px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    /* justify-content: center; */
+
+}
+
+.taskList li p {
+    width: 300px;
+    padding-right: 10px;
+    margin-left: 10px;
+    font-size: 15px;
+}
+
+
+.btn {
+    background-color: #F3BAC2;
+    bottom: 10px;
+    right: 10px;
+    height: 28px;
+    cursor: pointer;
+    color: red;
+    font-size: 15px;
+
+}
+
+
+
+
+
+
+@media only screen and (max-width: 900px) {
+    .flex-container {
+        position: relative;
+    }
+
+    .mainHeading {
+        font-size: 6.5vw;
+    }
+
+    .smallHeading {
+        font-size: 2.5vw;
+        width: 23vw;
+    }
+
+    .addItem {
+        width: 35vw;
+    }
+}
