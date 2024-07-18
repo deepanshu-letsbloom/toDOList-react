@@ -40,7 +40,6 @@ const App = () => {
                 body: JSON.stringify({
                     completed: false,
                     title: tempTask,
-                    id: 1000
                 }),
                 headers: {
                     'Content-type': 'application/json; charset=UTF-8',
