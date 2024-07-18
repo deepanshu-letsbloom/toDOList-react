@@ -78,7 +78,7 @@ const App = () => {
             const data = await response.json();
             var temp = [];
             let tot = 0, pending = 0, completed = 0;
-            data.map((value) => {
+            data.forEach((value) => {
                 temp.push({ "id": value.id, "title": value.title, "completed": value.completed });
                 tot++;
                 if (value.completed === true) completed++;
