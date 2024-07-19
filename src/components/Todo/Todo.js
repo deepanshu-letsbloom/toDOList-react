@@ -18,16 +18,37 @@ function Todo() {
         taskArray, setTaskArray
     } = useToDos();
 
-    const handleCheckboxChange = (index) =>{
-        if (taskArray[index].completed === true){
-            setCompletedTasks(completedTask-1);
-            setPendingTasks(pendingTask+1);
-            taskArray[index].completed = false;
-        }
-        else{
-            setCompletedTasks(completedTask+1);
-            setPendingTasks(pendingTask-1);
-            taskArray[index].completed = true;
+    const handleCheckboxChange = async  (index) =>{
+        try{
+            var temp = {
+                id : taskArray[index].id,
+                userId : taskArray[index].userId,
+                title : taskArray[index].title,
+                completed : taskArray[index].completed,
+            }
+            if (taskArray[index].completed) temp.completed = false
+            else temp.completed = true
+            const response = await fetch ("https://jsonplaceholder.typicode.com/todos/" + temp.id, {
+                method: 'PUT',
+                body : JSON.stringify(temp),
+                headers: {
+                    'Content-type': 'application/json; charset=UTF-8',
+                },
+            });
+            const data = await response.json();
+            console.log(data)
+            if (taskArray[index].completed === true){
+                setCompletedTasks(completedTask-1);
+                setPendingTasks(pendingTask+1);
+                taskArray[index].completed = false;
+            }
+            else{
+                setCompletedTasks(completedTask+1);
+                setPendingTasks(pendingTask-1);
+                taskArray[index].completed = true;
+            }
+        } catch (error){
+            console.log(error)
         }
     }
 
@@ -65,12 +86,21 @@ function Todo() {
     //     setTaskArray([]);
     // };
 
-    const deleteTask = (deleteIndex) => {
-        setTotalTasks(totalTask - 1);
-        if (taskArray[deleteIndex].completed) setPendingTasks(pendingTask - 1);
-        else setCompletedTasks(completedTask - 1);
-        const temp = taskArray.filter((item, index) => deleteIndex !== index);
-        setTaskArray(temp);
+    const deleteTask = async (deleteIndex) => {
+        try{
+            const response = await fetch ("https://jsonplaceholder.typicode.com/todos/" + taskArray[deleteIndex].id, {
+                method: 'DELETE',
+            });
+            const data = await response.json();
+            // console.log(data)
+            setTotalTasks(totalTask - 1);
+            if (taskArray[deleteIndex].completed) setPendingTasks(pendingTask - 1);
+            else setCompletedTasks(completedTask - 1);
+            const temp = taskArray.filter((item, index) => deleteIndex !== index);
+            setTaskArray(temp);
+        } catch (error){
+            console.log(error)
+        }
     }
 
     // const getFromAPI = async () => {
@@ -106,7 +136,7 @@ function Todo() {
                 var temp = [];
                 let tot = 0, pending = 0, completed = 0;
                 data.forEach((value) => {
-                    temp.push({ "id": value.id, "title": value.title, "completed": value.completed });
+                    temp.push({ "id": value.id, "title": value.title, "completed": value.completed, "userId" : value.userId});
                     tot++;
                     if (value.completed === true) completed++;
                     else pending++;
@@ -120,7 +150,7 @@ function Todo() {
             }
         };
         getFromAPI();
-    }, []);
+    }, [setTaskArray]);
 
 
     return (
@@ -161,7 +191,9 @@ function Todo() {
                     return <li>
                         <input type='checkbox' checked={task.completed} onChange={() => handleCheckboxChange(index)}/>
                         <p>{task.title}</p>
-                        <button className="btn" onClick={() => deleteTask(index) }>Delete</button>
+                        {task.completed && (
+                            <button className="btn" onClick={() => deleteTask(index) }>Delete</button>
+                        )}
                     </li>
                 })}
             </ul>
