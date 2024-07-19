@@ -1,36 +1,42 @@
 import React, { useState, useEffect } from 'react'
 import './ToDo.css';
-import { useToDos } from './contexts/Context';
+import  {useToDos}  from './contexts/Context';
+import   NavBar  from "../NavBar/NavBar.js"
+// import {  useNavigate } from 'react-router-dom';
 
-function Todo() {
+
+function Todo(){
 
     const [task, setTask] = useState("");
     // const [taskArray, setTaskArray] = useState([]);
-    const [totalTask, setTotalTasks] = useState(0);
-    const [completedTask, setCompletedTasks] = useState(0);
-    const [pendingTask, setPendingTasks] = useState(0);
+    // const [totalTask, setTotalTasks] = useState(0);
+    // const [completedTask, setCompletedTasks] = useState(0);
+    // const [pendingTask, setPendingTasks] = useState(0);
 
     const handleTaskChange = (event) => {
         setTask(event.target.value);
     }
 
+    // const navigate = useNavigate();
+
     const {
-        taskArray, setTaskArray
+        taskArray, setTaskArray,
+        totalTask, setTotalTasks,
+        completedTask, setCompletedTasks,
+        pendingTask, setPendingTasks,
     } = useToDos();
+
+    // const moveToNavBar = ()=>{
+    //     navigate("/navbar")
+    // }
 
     const handleCheckboxChange = async  (index) =>{
         try{
-            var temp = {
-                id : taskArray[index].id,
-                userId : taskArray[index].userId,
-                title : taskArray[index].title,
-                completed : taskArray[index].completed,
-            }
-            if (taskArray[index].completed) temp.completed = false
-            else temp.completed = true
-            const response = await fetch ("https://jsonplaceholder.typicode.com/todos/" + temp.id, {
-                method: 'PUT',
-                body : JSON.stringify(temp),
+            const response = await fetch ("https://jsonplaceholder.typicode.com/todos/" + taskArray[index].id, {
+                method: 'PATCH',
+                body : JSON.stringify({
+                    completed : !taskArray[index].completed,
+                }),
                 headers: {
                     'Content-type': 'application/json; charset=UTF-8',
                 },
@@ -59,7 +65,6 @@ function Todo() {
                 alert("Please insert a valid task!!!")
                 return;
             }
-            // console.log("here ", tempTask)
             const response = await fetch("https://jsonplaceholder.typicode.com/todos", {
                 method: 'POST',
                 body: JSON.stringify({
@@ -92,7 +97,7 @@ function Todo() {
                 method: 'DELETE',
             });
             const data = await response.json();
-            // console.log(data)
+            console.log(data)
             setTotalTasks(totalTask - 1);
             if (taskArray[deleteIndex].completed) setPendingTasks(pendingTask - 1);
             else setCompletedTasks(completedTask - 1);
@@ -136,7 +141,7 @@ function Todo() {
                 var temp = [];
                 let tot = 0, pending = 0, completed = 0;
                 data.forEach((value) => {
-                    temp.push({ "id": value.id, "title": value.title, "completed": value.completed, "userId" : value.userId});
+                    temp.push({"id" : value.id, "title" : value.title, "completed" : value.completed});
                     tot++;
                     if (value.completed === true) completed++;
                     else pending++;
@@ -150,13 +155,13 @@ function Todo() {
             }
         };
         getFromAPI();
-    }, [setTaskArray]);
-
+    }, [setTaskArray, setCompletedTasks, setPendingTasks, setTotalTasks]);
 
     return (
         <div className="flex-container">
 
             <div className="mainHeading"> TO DO List </div>
+            {/* <button onClick={moveToNavBar} >NavBar</button> */}
             <p className="smallHeading"> Get your to do list </p>
             <input
                 type="text"
@@ -178,11 +183,12 @@ function Todo() {
                 {/* <button className="btnEditDiv" onClick={resetList}>Reset List</button> */}
             </div>
 
-            <div className='taskBtn'>
+            {/* <div className='taskBtn'>
                 <div>Total tasks : {totalTask}</div>
                 <div>Pending tasks : {pendingTask}</div>
                 <div>completed tasks : {completedTask} </div>
-            </div>
+            </div> */}
+            <NavBar/>
 
             {/* <button className="btnAPI" onClick={getFromAPI}>Get From API</button> */}
 
