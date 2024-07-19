@@ -73,30 +73,52 @@ function Todo() {
         setTaskArray(temp);
     }
 
-    const getFromAPI = async () => {
-        try {
-            const response = await fetch("https://jsonplaceholder.typicode.com/todos", {
-                method: 'GET',
-            });
-            const data = await response.json();
-            var temp = [];
-            let tot = 0, pending = 0, completed = 0;
-            data.forEach((value) => {
-                temp.push({ "id": value.id, "title": value.title, "completed": value.completed });
-                tot++;
-                if (value.completed === true) completed++;
-                else pending++;
-            })
-            setCompletedTasks(completed);
-            setTotalTasks(tot);
-            setPendingTasks(pending);
-            setTaskArray(temp);
-        } catch (error) {
-            console.log('Error receiving data', error);
-        }
-    }
+    // const getFromAPI = async () => {
+    //     try {
+    //         const response = await fetch("https://jsonplaceholder.typicode.com/todos", {
+    //             method: 'GET',
+    //         });
+    //         const data = await response.json();
+    //         var temp = [];
+    //         let tot = 0, pending = 0, completed = 0;
+    //         data.forEach((value) => {
+    //             temp.push({ "id": value.id, "title": value.title, "completed": value.completed });
+    //             tot++;
+    //             if (value.completed === true) completed++;
+    //             else pending++;
+    //         })
+    //         setCompletedTasks(completed);
+    //         setTotalTasks(tot);
+    //         setPendingTasks(pending);
+    //         setTaskArray(temp);
+    //     } catch (error) {
+    //         console.log('Error receiving data', error);
+    //     }
+    // }
 
     useEffect(() => {
+        const getFromAPI = async () => {
+            try {
+                const response = await fetch("https://jsonplaceholder.typicode.com/todos", {
+                    method: 'GET',
+                });
+                const data = await response.json();
+                var temp = [];
+                let tot = 0, pending = 0, completed = 0;
+                data.forEach((value) => {
+                    temp.push({ "id": value.id, "title": value.title, "completed": value.completed });
+                    tot++;
+                    if (value.completed === true) completed++;
+                    else pending++;
+                })
+                setCompletedTasks(completed);
+                setTotalTasks(tot);
+                setPendingTasks(pending);
+                setTaskArray(temp);
+            } catch (error) {
+                console.log('Error receiving data', error);
+            }
+        };
         getFromAPI();
     }, []);
 
