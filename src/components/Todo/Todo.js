@@ -32,7 +32,7 @@ function Todo(){
 
     const handleCheckboxChange = async  (index) =>{
         try{
-            const response = await fetch ("https://jsonplaceholder.typicode.com/todos/" + taskArray[index].id, {
+            const response = await fetch ("http://localhost:8080/tasks/" + taskArray[index].id, {
                 method: 'PATCH',
                 body : JSON.stringify({
                     completed : !taskArray[index].completed,
@@ -42,8 +42,8 @@ function Todo(){
                 },
             });
             const data = await response.json();
-            console.log(data)
-            if (taskArray[index].completed === true){
+            console.log(taskArray)
+            if (taskArray[index].completed){
                 setCompletedTasks(completedTask-1);
                 setPendingTasks(pendingTask+1);
                 taskArray[index].completed = false;
@@ -65,11 +65,11 @@ function Todo(){
                 alert("Please insert a valid task!!!")
                 return;
             }
-            const response = await fetch("https://jsonplaceholder.typicode.com/todos", {
+            const response = await fetch("http://localhost:8080/tasks", {
                 method: 'POST',
                 body: JSON.stringify({
                     completed: false,
-                    title: tempTask,
+                    task: tempTask,
                 }),
                 headers: {
                     'Content-type': 'application/json; charset=UTF-8',
@@ -93,13 +93,13 @@ function Todo(){
 
     const deleteTask = async (deleteIndex) => {
         try{
-            const response = await fetch ("https://jsonplaceholder.typicode.com/todos/" + taskArray[deleteIndex].id, {
+            const response = await fetch ("http://localhost:8080/tasks/" + taskArray[deleteIndex].id, {
                 method: 'DELETE',
             });
-            const data = await response.json();
-            console.log(data)
+            // const data = await response.ok;
+            // console.log(data)
             setTotalTasks(totalTask - 1);
-            if (taskArray[deleteIndex].completed) setPendingTasks(pendingTask - 1);
+            if (!taskArray[deleteIndex].completed) setPendingTasks(pendingTask - 1);
             else setCompletedTasks(completedTask - 1);
             const temp = taskArray.filter((item, index) => deleteIndex !== index);
             setTaskArray(temp);
@@ -117,7 +117,7 @@ function Todo(){
     //         var temp = [];
     //         let tot = 0, pending = 0, completed = 0;
     //         data.forEach((value) => {
-    //             temp.push({ "id": value.id, "title": value.title, "completed": value.completed });
+    //             temp.push({ "id": value.id, "task": value.task, "completed": value.completed });
     //             tot++;
     //             if (value.completed === true) completed++;
     //             else pending++;
@@ -134,14 +134,14 @@ function Todo(){
     useEffect(() => {
         const getFromAPI = async () => {
             try {
-                const response = await fetch("https://jsonplaceholder.typicode.com/todos", {
+                const response = await fetch("http://localhost:8080/tasks", {
                     method: 'GET',
                 });
                 const data = await response.json();
                 var temp = [];
                 let tot = 0, pending = 0, completed = 0;
                 data.forEach((value) => {
-                    temp.push({"id" : value.id, "title" : value.title, "completed" : value.completed});
+                    temp.push({"id" : value.id, "task" : value.task, "completed" : value.completed});
                     tot++;
                     if (value.completed === true) completed++;
                     else pending++;
@@ -196,10 +196,10 @@ function Todo(){
                 {taskArray.map((task, index) => {
                     return <li>
                         <input type='checkbox' checked={task.completed} onChange={() => handleCheckboxChange(index)}/>
-                        <p>{task.title}</p>
-                        {task.completed && (
+                        <p>{task.task}</p>
+                        {/* {task.completed && ( */}
                             <button className="btn" onClick={() => deleteTask(index) }>Delete</button>
-                        )}
+                        {/* )} */}
                     </li>
                 })}
             </ul>
