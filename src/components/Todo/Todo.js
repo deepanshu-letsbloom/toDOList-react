@@ -7,7 +7,15 @@ import   NavBar  from "../NavBar/NavBar.js"
 
 function Todo(){
 
+    const convertDate = (dateStr) => {
+        const [year, month, day] = dateStr.split("-");
+        return `${year}/${month}/${day}`;
+      };
+
     const [task, setTask] = useState("");
+    const [dueDate, setDueDate] = useState((new Date()).toISOString().split('T')[0]);
+    const [beforeDate, setBeforeDate] = useState((new Date()).toISOString().split('T')[0]);
+    const [isBefore, setIsBefore] = useState(false);
     // const [taskArray, setTaskArray] = useState([]);
     // const [totalTask, setTotalTasks] = useState(0);
     // const [completedTask, setCompletedTasks] = useState(0);
@@ -15,6 +23,14 @@ function Todo(){
 
     const handleTaskChange = (event) => {
         setTask(event.target.value);
+    }
+
+    const handleDateChange = (event) => {
+        setDueDate(event.target.value);
+    }
+
+    const handleBeforeDateChange = (event) => {
+        setBeforeDate(event.target.value);
     }
 
     // const navigate = useNavigate();
@@ -30,6 +46,38 @@ function Todo(){
     //     navigate("/navbar")
     // }
 
+
+    const submitTaskItem = async () => {
+        try {
+            var tempTask = task.trim();
+            if (tempTask === "" || dueDate==="") {
+                alert("Please insert a valid task!!!")
+                return;
+            }
+            const response = await fetch("http://localhost:8080/tasks", {
+                method: 'POST',
+                body: JSON.stringify({
+                    "completed": false,
+                    "task": tempTask,
+                    "dueDate" : convertDate(dueDate)
+                }),
+                headers: {
+                    'Content-type': 'application/json; charset=UTF-8',
+                },
+            });
+            const data = await response.json();
+            setTotalTasks(totalTask + 1);
+            if (data.completed === true) setCompletedTasks(completedTask + 1);
+            else setPendingTasks(pendingTask + 1);
+            setTaskArray([data, ...taskArray]);
+            setTask("")
+            setDueDate((new Date()).toISOString().split('T')[0])
+
+        } catch (error) {
+            console.log('Error receiving data', error);
+        }
+    }
+
     const handleCheckboxChange = async  (index) =>{
         try{
             const response = await fetch ("http://localhost:8080/tasks/" + taskArray[index].id, {
@@ -42,7 +90,6 @@ function Todo(){
                 },
             });
             const data = await response.json();
-            console.log(taskArray)
             if (taskArray[index].completed){
                 setCompletedTasks(completedTask-1);
                 setPendingTasks(pendingTask+1);
@@ -58,38 +105,35 @@ function Todo(){
         }
     }
 
-    const submitTaskItem = async () => {
-        try {
-            var tempTask = task.trim();
-            if (tempTask === "") {
-                alert("Please insert a valid task!!!")
+    const getTasksBeforeDate = async () =>{
+        try{
+            setIsBefore(true);
+            if (beforeDate === ""){
+                alert("Please insert a valid date!!!")
                 return;
             }
-            const response = await fetch("http://localhost:8080/tasks", {
-                method: 'POST',
-                body: JSON.stringify({
-                    completed: false,
-                    task: tempTask,
-                }),
-                headers: {
-                    'Content-type': 'application/json; charset=UTF-8',
-                },
+            const response = await fetch("http://localhost:8080/tasks/beforeDate/" + beforeDate, {
+                method: 'GET',
             });
             const data = await response.json();
-            setTotalTasks(totalTask + 1);
-            if (data.completed === true) setCompletedTasks(completedTask + 1);
-            else setPendingTasks(pendingTask + 1);
-            setTaskArray([data, ...taskArray]);
-            setTask("")
-
-        } catch (error) {
-            console.log('Error receiving data', error);
+            console.log(data);
+            var temp = [];              
+            let tot = 0, pending = 0, completed = 0;
+            data.forEach((value) => {
+                temp.push({"id" : value.id, "task" : value.task, "completed" : value.completed, "dueDate" : value.dueDate});
+                tot++;
+                if (value.completed) completed++;
+                else pending++;
+            })
+            setCompletedTasks(completed);
+            setTotalTasks(tot);
+            setPendingTasks(pending);
+            setTaskArray(temp);
+        } catch (error){
+            console.log(error);
         }
-    }
 
-    // const resetList = () => {
-    //     setTaskArray([]);
-    // };
+    }
 
     const deleteTask = async (deleteIndex) => {
         try{
@@ -108,54 +152,35 @@ function Todo(){
         }
     }
 
-    // const getFromAPI = async () => {
-    //     try {
-    //         const response = await fetch("https://jsonplaceholder.typicode.com/todos", {
-    //             method: 'GET',
-    //         });
-    //         const data = await response.json();
-    //         var temp = [];
-    //         let tot = 0, pending = 0, completed = 0;
-    //         data.forEach((value) => {
-    //             temp.push({ "id": value.id, "task": value.task, "completed": value.completed });
-    //             tot++;
-    //             if (value.completed === true) completed++;
-    //             else pending++;
-    //         })
-    //         setCompletedTasks(completed);
-    //         setTotalTasks(tot);
-    //         setPendingTasks(pending);
-    //         setTaskArray(temp);
-    //     } catch (error) {
-    //         console.log('Error receiving data', error);
-    //     }
-    // }
 
+    
+
+    const getFromAPI = async () => {
+        try {
+            setIsBefore(false)
+            const response = await fetch("http://localhost:8080/tasks", {
+                method: 'GET',
+            });
+            const data = await response.json();
+            var temp = [];
+            let tot = 0, pending = 0, completed = 0;
+            data.forEach((value) => {
+                temp.push({"id" : value.id, "task" : value.task, "completed" : value.completed, "dueDate" : value.dueDate});
+                tot++;
+                if (value.completed === true) completed++;
+                else pending++;
+            })
+            setCompletedTasks(completed);
+            setTotalTasks(tot);
+            setPendingTasks(pending);
+            setTaskArray(temp);
+        } catch (error) {
+            console.log('Error receiving data', error);
+        }
+    };
     useEffect(() => {
-        const getFromAPI = async () => {
-            try {
-                const response = await fetch("http://localhost:8080/tasks", {
-                    method: 'GET',
-                });
-                const data = await response.json();
-                var temp = [];
-                let tot = 0, pending = 0, completed = 0;
-                data.forEach((value) => {
-                    temp.push({"id" : value.id, "task" : value.task, "completed" : value.completed});
-                    tot++;
-                    if (value.completed === true) completed++;
-                    else pending++;
-                })
-                setCompletedTasks(completed);
-                setTotalTasks(tot);
-                setPendingTasks(pending);
-                setTaskArray(temp);
-            } catch (error) {
-                console.log('Error receiving data', error);
-            }
-        };
         getFromAPI();
-    }, [setTaskArray, setCompletedTasks, setPendingTasks, setTotalTasks]);
+    }, []);
 
     return (
         <div className="flex-container">
@@ -163,13 +188,23 @@ function Todo(){
             <div className="mainHeading"> TO DO List </div>
             {/* <button onClick={moveToNavBar} >NavBar</button> */}
             <p className="smallHeading"> Get your to do list </p>
-            <input
-                type="text"
-                className="addItem"
-                placeholder="to-do list..."
-                value={task}
-                onChange={handleTaskChange}
-            />
+            <div className='mainInputDiv'>
+                <input
+                    type="text"
+                    className="addItem"
+                    placeholder="to-do list..."
+                    value={task}
+                    onChange={handleTaskChange}
+                />
+
+                <input 
+                    type = "date"
+                    className='addDate'
+                    name='Due Date'
+                    value={dueDate}
+                    onChange={handleDateChange}
+                />
+            </div>
 
             <div className="editDiv">
                 <button
@@ -188,6 +223,26 @@ function Todo(){
                 <div>Pending tasks : {pendingTask}</div>
                 <div>completed tasks : {completedTask} </div>
             </div> */}
+
+            <div className='bigBeforeDiv'>
+                <div className='beforeDiv'>
+                    <p>  Get tasks before : </p>
+                    <input 
+                        type = "date"
+                        className='beforeDate'
+                        name='before Date'
+                        value={beforeDate}
+                        onChange={handleBeforeDateChange}
+                    />
+                </div>
+                <div className='beforeDivSubmit'>
+                    {!isBefore ? (<button onClick={() => getTasksBeforeDate()}>Get</button>) 
+                    : (<button onClick={() => getFromAPI()}>Reset</button>)}
+                    
+                </div>
+            </div>
+
+            
             <NavBar/>
 
             {/* <button className="btnAPI" onClick={getFromAPI}>Get From API</button> */}
@@ -196,10 +251,9 @@ function Todo(){
                 {taskArray.map((task, index) => {
                     return <li>
                         <input type='checkbox' checked={task.completed} onChange={() => handleCheckboxChange(index)}/>
-                        <p>{task.task}</p>
-                        {/* {task.completed && ( */}
-                            <button className="btn" onClick={() => deleteTask(index) }>Delete</button>
-                        {/* )} */}
+                        <p className='taskText'>{task.task}</p>
+                        <p className='dueDatePara'> Due Date - {task.dueDate}</p>
+                        <button className="btn" onClick={() => deleteTask(index) }>Delete</button>
                     </li>
                 })}
             </ul>
